@@ -10,12 +10,14 @@ const canvasSize = 400;
 // STATE OF THE GAME
 let snake;
 let food;
+let direction;
 let game;
 
 //GAME INITIALIZATION
 function initializeGame() {
   snake = [{ x: 9 * box, y: 10 * box }];
   food = generateFood();
+  direction = null;
   if (game) clearInterval(game);
   game = setInterval(draw, 100);
 }
@@ -31,16 +33,45 @@ function generateFood() {
 //DRAWING FUNCTIONS
 function draw() {
   ctx.fillStyle = "#010409";
-  ctx.fillReact(0, 0, canvasSize, canvasSize);
+  ctx.fillRect(0, 0, canvasSize, canvasSize);
 
   for (let i = 0; i < snake.length; i++) {
     ctx.fillStyle = i === 0 ? "#00e676" : "#4caf50";
-    ctx.fillReact(snake[i].x, snake[i].y, box, box);
+    ctx.fillRect(snake[i].x, snake[i].y, box, box);
     ctx.strokeStyle = "#010409";
-    ctx.strokeReact(snake[i].x, snake[i].y, box, box);
+    ctx.fillRect(food.x, food.y, box, box);
   }
   ctx.fillStyle = "#ff5252";
-  ctx.fillReact(food.x, food.y, box, box);
+  ctx.fillRect(food.x, food.y, box, box);
+
+  let snakeX = snake[0].x;
+  let snakeY = snake[0].y;
+
+  if (direction) {
+    if (direction == "LEFT") snakeX -= box;
+    if (direction == "UP") snakeY -= box;
+    if (direction == "RIGHT") snakeX += box;
+    if (direction == "DOWN") snakeY += box;
+
+    let newHead = { x: snakeX, y: snakeY };
+    snake.unshift(newHead);
+    snake.pop();
+  }
+}
+
+document.addEventListener("keydown", setDirection);
+
+function setDirection(event) {
+  let key = event.keyCode;
+  if (key == 37 && direction != "RIGHT") {
+    direction = "LEFT";
+  } else if (key == 38 && direction != "DOWN") {
+    direction = "UP";
+  } else if (key == 39 && direction != "LEfT") {
+    direction = "RIGHT";
+  } else if (key == 40 && direction != "UP") {
+    direction = "DOWN";
+  }
 }
 
 window.onload = initializeGame;
