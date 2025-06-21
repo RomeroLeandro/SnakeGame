@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body class="flex flex-col items-center justify-center min-h-screen p-4">
+    <h1 class="text-4xl md:text-5xl mb-4 text-green-400">SNAKE</h1>
+    <div class="text-center mb-4">
+      <span class="text-2xl">PUNTAJE</span>
+      <span id="score" class="text-2xl text-yellow-300">0</span>
+    </div>
+    <div class="game-container rounded-lg overflow-hidden">
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+    </div>
+  </body>
+</html>
