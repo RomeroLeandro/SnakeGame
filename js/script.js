@@ -12,22 +12,38 @@ let snake;
 let food;
 let direction;
 let game;
+let score;
 
 //GAME INITIALIZATION
 function initializeGame() {
   snake = [{ x: 9 * box, y: 10 * box }];
   food = generateFood();
   direction = null;
+  score = 0;
+  scoreE1.innerText = score;
   if (game) clearInterval(game);
   game = setInterval(draw, 100);
 }
 
 //Generate a new position for food
 function generateFood() {
-  return {
-    x: Math.floor(Math.random() * (canvasSize / box)) * box,
-    y: Math.floor(Math.random() * (canvasSize / box)) * box,
-  };
+  let newFood;
+  do {
+    newFood = {
+      x: Math.floor(Math.random() * (canvasSize / box)) * box,
+      y: Math.floor(Math.random() * (canvasSize / box)) * box,
+    };
+  } while (checkCollision(newFood, snake));
+  return newFood;
+}
+
+function checkCollision(head, snake) {
+  for (let i = 1; i < snake.length; i++) {
+    if (head.x === snake[i].x && head.y === snake[i].y) {
+      return true;
+    }
+  }
+  return false;
 }
 
 //DRAWING FUNCTIONS
@@ -47,15 +63,22 @@ function draw() {
   let snakeX = snake[0].x;
   let snakeY = snake[0].y;
 
+  // Check if the snake has eaten the food
+  if (snakeX == food.x && snakeY == food.y) {
+    score++;
+    scoreE1.innerText = score;
+    food = generateFood();
+  } else {
+    if (direction) snake.pop();
+  }
+
   if (direction) {
     if (direction == "LEFT") snakeX -= box;
     if (direction == "UP") snakeY -= box;
     if (direction == "RIGHT") snakeX += box;
     if (direction == "DOWN") snakeY += box;
-
     let newHead = { x: snakeX, y: snakeY };
     snake.unshift(newHead);
-    snake.pop();
   }
 }
 
