@@ -20,6 +20,26 @@
     <div class="game-container rounded-lg overflow-hidden">
       <canvas id="gameCanvas" width="400" height="400"></canvas>
     </div>
+    <div
+      id="gameOverModal"
+      class="fixed insert-0 bg-black bg-opacity-75 flex flex-col items-center justify-center text-center p-4"
+    >
+      <div
+        class="game-over-modal p-8 rounded-lg border-2 border-red-500 shaadow-lg"
+      >
+        <h2 class="text-4xl text-red-500 mb-4">GAME OVER</h2>
+        <p class="text-xl mb-6">
+          Tu puntaje final es:
+          <span id="finalScore" class="text-yellow-300">0</span>
+        </p>
+        <button
+          id="restartButton"
+          class="w-full bg-green-500 hover:bg-green-600 text-black font-bold py-3 px-6 rounded-lg text-2xl"
+        >
+          REINICIAR
+        </button>
+      </div>
+    </div>
     <script src="js/script.js"></script>
   </body>
 </html>

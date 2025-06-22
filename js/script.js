@@ -2,6 +2,8 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 const scoreE1 = document.getElementById("score");
+const finalScoreE1 = document.getElementById("finalScore");
+const gameOverModal = document.getElementById("gameOverModal");
 
 // The size of each cell on the board
 const box = 20;
@@ -13,6 +15,7 @@ let food;
 let direction;
 let game;
 let score;
+let gameIsOver;
 
 //GAME INITIALIZATION
 function initializeGame() {
@@ -20,6 +23,8 @@ function initializeGame() {
   food = generateFood();
   direction = null;
   score = 0;
+  gameIsOver = false;
+  gameOverModal.classList.add("hidden");
   scoreE1.innerText = score;
   if (game) clearInterval(game);
   game = setInterval(draw, 100);
@@ -48,6 +53,7 @@ function checkCollision(head, snake) {
 
 //DRAWING FUNCTIONS
 function draw() {
+  if (gameIsOver) return;
   ctx.fillStyle = "#010409";
   ctx.fillRect(0, 0, canvasSize, canvasSize);
 
@@ -78,8 +84,27 @@ function draw() {
     if (direction == "RIGHT") snakeX += box;
     if (direction == "DOWN") snakeY += box;
     let newHead = { x: snakeX, y: snakeY };
-    snake.unshift(newHead);
+    if (
+      snakeX < 0 ||
+      snakeY < 0 ||
+      snakeX >= canvasSize ||
+      snakeY >= canvasSize ||
+      checkCollision(newHead, snake)
+    ) {
+      gameOver();
+    } else {
+      if (direction) {
+        snake.unshift(newHead);
+      }
+    }
   }
+}
+
+function gameOver() {
+  clearInterval(game);
+  gameIsOver = true;
+  finalScoreE1.innerText = score;
+  gameOverModal.classList.remove("hidden");
 }
 
 document.addEventListener("keydown", setDirection);
