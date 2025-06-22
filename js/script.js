@@ -4,6 +4,7 @@ const ctx = canvas.getContext("2d");
 const scoreE1 = document.getElementById("score");
 const finalScoreE1 = document.getElementById("finalScore");
 const gameOverModal = document.getElementById("gameOverModal");
+const restartButton = document.getElementById("restartButton");
 
 // The size of each cell on the board
 const box = 20;
@@ -111,15 +112,31 @@ document.addEventListener("keydown", setDirection);
 
 function setDirection(event) {
   let key = event.keyCode;
-  if (key == 37 && direction != "RIGHT") {
+  if ((key == 37 || key == 65) && direction != "RIGHT") {
     direction = "LEFT";
-  } else if (key == 38 && direction != "DOWN") {
+  } else if ((key == 38 || key == 87) && direction != "DOWN") {
     direction = "UP";
-  } else if (key == 39 && direction != "LEfT") {
+  } else if ((key == 39 || key == 68) && direction != "LEFT") {
     direction = "RIGHT";
-  } else if (key == 40 && direction != "UP") {
+  } else if ((key == 40 || key == 83) && direction != "UP") {
     direction = "DOWN";
   }
 }
+
+// Mobile controls
+document.getElementById("up-btn").addEventListener("click", () => {
+  if (direction != "DOWN") direction = "UP";
+});
+document.getElementById("down-btn").addEventListener("click", () => {
+  if (direction != "UP") direction = "DOWN";
+});
+document.getElementById("left-btn").addEventListener("click", () => {
+  if (direction != "RIGHT") direction = "LEFT";
+});
+document.getElementById("right-btn").addEventListener("click", () => {
+  if (direction != "LEFT") direction = "RIGHT";
+});
+
+restartButton.addEventListener("click", initializeGame);
 
 window.onload = initializeGame;
