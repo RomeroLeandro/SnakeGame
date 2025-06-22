@@ -20,13 +20,20 @@ let gameIsOver;
 
 //GAME INITIALIZATION
 function initializeGame() {
+  // Initial position of the snake
   snake = [{ x: 9 * box, y: 10 * box }];
   food = generateFood();
+
+  // Initial state
   direction = null;
   score = 0;
   gameIsOver = false;
+
+  // Update UI
   gameOverModal.classList.add("hidden");
   scoreE1.innerText = score;
+
+  // Start the game loop
   if (game) clearInterval(game);
   game = setInterval(draw, 100);
 }
@@ -43,6 +50,7 @@ function generateFood() {
   return newFood;
 }
 
+// Check if the head collides with the body
 function checkCollision(head, snake) {
   for (let i = 1; i < snake.length; i++) {
     if (head.x === snake[i].x && head.y === snake[i].y) {
@@ -55,18 +63,24 @@ function checkCollision(head, snake) {
 //DRAWING FUNCTIONS
 function draw() {
   if (gameIsOver) return;
+
+  // Draw the background
   ctx.fillStyle = "#010409";
   ctx.fillRect(0, 0, canvasSize, canvasSize);
 
+  // Draw the snake
   for (let i = 0; i < snake.length; i++) {
     ctx.fillStyle = i === 0 ? "#00e676" : "#4caf50";
     ctx.fillRect(snake[i].x, snake[i].y, box, box);
     ctx.strokeStyle = "#010409";
     ctx.fillRect(food.x, food.y, box, box);
   }
+
+  // Draw the food
   ctx.fillStyle = "#ff5252";
   ctx.fillRect(food.x, food.y, box, box);
 
+  // Save the current head position
   let snakeX = snake[0].x;
   let snakeY = snake[0].y;
 
@@ -79,28 +93,34 @@ function draw() {
     if (direction) snake.pop();
   }
 
+  // Move your head according to the direction
   if (direction) {
     if (direction == "LEFT") snakeX -= box;
     if (direction == "UP") snakeY -= box;
     if (direction == "RIGHT") snakeX += box;
     if (direction == "DOWN") snakeY += box;
-    let newHead = { x: snakeX, y: snakeY };
-    if (
-      snakeX < 0 ||
-      snakeY < 0 ||
-      snakeX >= canvasSize ||
-      snakeY >= canvasSize ||
-      checkCollision(newHead, snake)
-    ) {
-      gameOver();
-    } else {
-      if (direction) {
-        snake.unshift(newHead);
-      }
-    }
+  }
+
+  // Create the new head
+  let newHead = { x: snakeX, y: snakeY };
+
+  // Collision logic
+  if (
+    snakeX < 0 ||
+    snakeY < 0 ||
+    snakeX >= canvasSize ||
+    snakeY >= canvasSize ||
+    checkCollision(newHead, snake)
+  ) {
+    gameOver();
+    return;
+  }
+  if (direction) {
+    snake.unshift(newHead);
   }
 }
 
+// End the game
 function gameOver() {
   clearInterval(game);
   gameIsOver = true;
@@ -110,6 +130,7 @@ function gameOver() {
 
 document.addEventListener("keydown", setDirection);
 
+// --- INPUT HANDLING (KEYBOARD AND BUTTONS) ---
 function setDirection(event) {
   let key = event.keyCode;
   if ((key == 37 || key == 65) && direction != "RIGHT") {
